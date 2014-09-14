@@ -48,5 +48,4 @@ with Image(file=open(args.image)) as img:
 subprocess.call(['convert', './frames/*.gif',
 	'-delay', '10000',
 	'-loop', '0',
-	'-coalesce',
-	'out.gif'])
+	args.outfile if args.outfile else 'out.gif'])
