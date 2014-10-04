@@ -18,13 +18,13 @@ args = ap.parse_args()
 
 def cropshift(i, img, intensity):
 	if i == 0:
-		return img[:-1 * intensity, :]
+		return img[:-1 * intensity, intensity:]
 	if i == 1:
-		return img[:, :-1 * intensity]
+		return img[:-1 * intensity, :-1 * intensity]
 	if i == 2:
-		return img[intensity:, :]
+		return img[intensity:, :-1 * intensity]
 	if i == 3:
-		return img[:, intensity:]
+		return img[intensity:, intensity:]
 
 print args
 if not os.path.isdir('./frames'):
