@@ -14,6 +14,7 @@ ap.add_argument('--flash-text', action='store_true', default=False)
 ap.add_argument('-o', '--outfile', nargs='?', default='out.gif')
 ap.add_argument('--no-wiggle', action='store_false', dest='wiggle', default=True)
 ap.add_argument('--intensity', help='twerk moar')
+ap.add_argument('-s', '--speed', help='FASTER PLS (<5)')
 args = ap.parse_args()
 
 def cropshift(i, img, intensity):
@@ -35,7 +36,9 @@ with Image(file=open(args.image)) as img:
 	for x in range(4):
 		frame = gif.clone()
 		if args.wiggle:
-			frame = cropshift(x, frame, int(args.intensity))
+			frame = cropshift(
+				x, frame, 
+				int(args.intensity) if args.intensity else 20)
 		color = Color('#FFFFFF')
 		if args.flash_text and (x == 1 or x == 3):
 			color = Color('FF0000')
@@ -45,7 +48,10 @@ with Image(file=open(args.image)) as img:
 				gravity='south')
 		frame.save(filename=('./frames/%d.gif' % x))
 
-subprocess.call(['convert', './frames/*.gif',
-	'-delay', '10000',
+subprocess.call(['convert', 
+	'-dispose','none',
+	'-delay', str((5 - (float(args.speed) if args.speed else 3)) + 1.5),
+	'./frames/*.gif',
+	'-coalesce',
 	'-loop', '0',
 	args.outfile if args.outfile else 'out.gif'])
